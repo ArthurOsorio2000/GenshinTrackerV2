@@ -1,20 +1,42 @@
 from flask import Blueprint, jsonify
-from database_mysql import User_Profiles
+from database import *
 
-main_blueprint = Blueprint('main_blueprint', __name__)
+api = Blueprint('api', __name__)
 
 ##routes
 #index page:
-@main_blueprint.route("/")
+@api.route("/")
 def index():
     return "Good evening gamer ฅ^•ﻌ•^ฅ"
 
-@main_blueprint.route("/holly")
+@api.route("/holly")
 def holly():
     return "<p>Love u Holly!</p>"
 
-#routing test
-@main_blueprint.route('/users')
-def get_users():
-    users = User_Profiles.query.all()
-    return jsonify({'users': [user.username for user in users]})
+#routing
+##data listing routes for testing:
+@api.route('/userprofiles')
+def getUserProfiles():
+    allUsers = User_Profiles.query.all()
+    return jsonify({'user profiles:': [user.username for user in allUsers]})
+
+#get all character templates and details (presents in unordered JSON)
+@api.route('/charactertemplates', method = ['GET'])
+def getCharacterTemplates():
+    allCharacterTemplates = Character_Templates.query.all()
+    return jsonify({
+        'character templates:': [
+            {
+                'char id': characterTemplate.char_id, 'char name': characterTemplate.char_name,
+                'normalatk name': characterTemplate.normalatk_name, 'skill_name': characterTemplate.skill_name,
+                'burst name': characterTemplate.burst_name, 'talent id': characterTemplate.talent_id,
+                'weapon id': characterTemplate.weapon_id, 'region id': characterTemplate.region_id
+            }for characterTemplate in allCharacterTemplates
+        ]
+    })
+
+#testing user characters
+@api.route('/usercharacters')
+def getUserCharacters():
+    userCharacters = User_Characters.query.all()
+    return jsonify({'user created characters:': [characterName.user_id for characterName in userCharacters]})
