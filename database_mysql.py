@@ -1,23 +1,8 @@
-import os
-from dotenv import load_dotenv
-from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_mysqldb import MySQL
 
-load_dotenv()  # Load environment variables from .env file to protect user details
+db = SQLAlchemy()
 
-app = Flask(__name__)
-mysql = MySQL(app)
-
-#use below app.config instead to work with local database
-##############!!!!!!!!!!!!!!!!BE CAREFUL NOT TO UPLOAD PASSWORD TO GITHUB!!!!!!!!!!!!!!!!##############
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://<username>:<password>@<host>/<dbname>'
-##############!!!!!!!!!!!!!!!!BE CAREFUL NOT TO UPLOAD PASSWORD TO GITHUB!!!!!!!!!!!!!!!!##############
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('GENSHINPROJECTV2_DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
+#Database modelling
 
 # CREATE TABLE user_profiles(
 # 	user_id INT NOT NULL,
@@ -141,15 +126,3 @@ class User_Characters(db.Model):
 
     def __repr__(self):
         return f'<user id {self.user_id} | character id: {self.char_id}  | character level: {self.char_level}\nnormal attack level: {self.normalatk_level} | skill level: {self.skill_level} | burst level: {self.burst_level}>'
-    
-    ##routes
-#index page:
-@app.route("/")
-def index():
-    return "Good evening gamer ฅ^•ﻌ•^ฅ"
-
-#routing test
-@app.route('/users')
-def get_users():
-    users = User_Profiles.query.all()
-    return jsonify({'users': [user.username for user in users]})

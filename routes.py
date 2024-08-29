@@ -1,18 +1,20 @@
-from flask import jsonify
-from database_mysql import app, User_Profiles
+from flask import Blueprint, jsonify
+from database_mysql import User_Profiles
+
+main_blueprint = Blueprint('main_blueprint', __name__)
 
 ##routes
 #index page:
-@app.route("/")
+@main_blueprint.route("/")
 def index():
     return "Good evening gamer ฅ^•ﻌ•^ฅ"
 
-@app.route("/holly")
+@main_blueprint.route("/holly")
 def holly():
     return "<p>Love u Holly!</p>"
 
 #routing test
-@app.route('/users')
+@main_blueprint.route('/users')
 def get_users():
     users = User_Profiles.query.all()
     return jsonify({'users': [user.username for user in users]})
