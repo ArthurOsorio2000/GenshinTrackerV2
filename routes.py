@@ -1,28 +1,32 @@
+from datetime import datetime
 from flask import Blueprint, jsonify
 from database import *
 
 api = Blueprint('api', __name__)
 
 ##routes
-#index page:
+#index page and datetime testing:
 @api.route("/")
-def index():
-    return "Good evening gamer ฅ^•ﻌ•^ฅ"
-
-@api.route("/holly")
-def holly():
-    return "<p>Love u Holly!</p>"
+def Index():
+    currentTime = datetime.now().hour
+    match currentTime:
+        case currentTime if currentTime >= 0 and currentTime < 12:
+            return "Good morning gamer ฅ^•ﻌ•^ฅ"
+        case currentTime if currentTime >= 12 and currentTime < 7:
+            return "Good afternoon gamer ฅ^•ﻌ•^ฅ"
+        case _:
+            print("Good evening gamer ฅ^•ﻌ•^ฅ")
 
 #routing
 ##data listing routes for testing:
 @api.route('/userprofiles')
-def getUserProfiles():
+def GetUserProfiles():
     allUsers = User_Profiles.query.all()
     return jsonify({'user profiles:': [user.username for user in allUsers]})
 
 #get all character templates and details (presents in unordered JSON)
-@api.route('/charactertemplates', method = ['GET'])
-def getCharacterTemplates():
+@api.route('/charactertemplates', methods = ['GET'])
+def GetCharacterTemplates():
     allCharacterTemplates = Character_Templates.query.all()
     return jsonify({
         'character templates:': [
@@ -35,8 +39,57 @@ def getCharacterTemplates():
         ]
     })
 
+
+##############################################  user characters  ##############################################
 #testing user characters
+#get all user characters
 @api.route('/usercharacters')
-def getUserCharacters():
-    userCharacters = User_Characters.query.all()
-    return jsonify({'user created characters:': [characterName.user_id for characterName in userCharacters]})
+def GetUserCharacters():
+    userCharacters = User_Characters.query.all() #<-- I might have to user inner joins to create a table with the relevant information
+    return jsonify({
+        'user created characters:': [
+            {
+            'user id': userCharacter.user_id, 'char id': userCharacter.char_id,
+            'is tracked?': userCharacter.is_tracked
+            }for userCharacter in userCharacters
+        ]
+    })
+
+#get user
+@api.route('/getuser/<string:searchuserid>', methods=['GET'])
+def GetUser(searchuserid):
+    founduser = (
+        db.session.query(User_Profiles)
+        .filter(
+            (User_Profiles.user_id == searchuserid)
+        )
+        .all()
+    )
+    if (founduser):
+        return jsonify({'user from userid': [
+                {
+                    'username' : founduser.username
+                }
+            ]
+        })
+    return jsonify({'error': 'User not found.'}), 404
+
+#get selected user's characters
+@api.route('/getuserchars/<string:searchuserid>', methods=['GET'])
+def GetUserChars(searchuserid):
+    return 0
+
+
+#testing joins
+#get all characters that user has marked as tracked
+@api.route('/usercharactertracking/<string:searchuserid>')
+def GetUserCharacterTracking():
+    userCharacters = db.session.query() #<-- I might have to user inner joins to create a table with the relevant information
+    return jsonify({
+        'user created characters:': [
+            {
+            'user id': userCharacter.user_id, 'char id': userCharacter.char_id,
+            'is tracked?': userCharacter.is_tracked
+            }for userCharacter in userCharacters
+        ]
+    })

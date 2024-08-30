@@ -118,6 +118,7 @@ class User_Characters(db.Model):
 
     user_id = db.Column(db.Integer, primary_key = True)
     char_id = db.Column(db.Integer, primary_key = True)
+    is_tracked = db.Column(db.Boolean, nullable = False)
     char_level = db.Column(db.String(255))
     normalatk_level = db.Column(db.Integer)
     skill_level = db.Column(db.Integer)

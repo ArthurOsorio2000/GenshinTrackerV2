@@ -17,7 +17,7 @@ def create_app():
 
     #connect to Database URI
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('GENSHINPROJECTV2_DATABASE_URL')
-    #turn off tracking to lower resource use
+    #turn off tracking to lower resource allocation
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     #initialise sqlalchemy database models from database | db = sqlalchemy
