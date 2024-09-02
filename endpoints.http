@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:5000
+
+###Get Health
+GET {{baseUrl}}/health
+
+###Password testing
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test1",
+    "passwordVerify": "test1"
+}
+
+###Positive testing: user already exists
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "username": "Arthur",
+    "password": "test1",
+    "passwordVerify": "test1"
+}

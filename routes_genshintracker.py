@@ -135,7 +135,7 @@ def GetUserCharacterTracking(searchuserid):
         #output if length of owned characters is 0
         return jsonify({
         'error': 'No characters owned.'
-    }), 404
+        }), 404
     #output if user does not exist
     return jsonify({
         'error': 'User not found.'
