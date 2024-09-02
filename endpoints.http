@@ -3,6 +3,9 @@
 ###Get Health
 GET {{baseUrl}}/health
 
+###test login wrapper
+GET {{baseUrl}}/loginTest
+
 ###Positive testing: user already exists
 POST {{baseUrl}}/register
 Content-Type: application/json
@@ -28,9 +31,18 @@ POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-    "inputUsername": "test1",
-    "inputPassword": "test1",
-    "verifyInputPassword": "test1"
+    "inputUsername": "Cheesey331",
+    "inputPassword": "password",
+    "verifyInputPassword": "password"
+}
+
+###User login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "inputUsername": "Cheesey331",
+    "inputPassword": "password"
 }
 
 ###Get All Users

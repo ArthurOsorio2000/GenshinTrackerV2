@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import *
 from sqlalchemy import *
 from database import *
 from toolbox import *

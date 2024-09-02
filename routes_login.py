@@ -1,15 +1,38 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import *
 from sqlalchemy import *
 from database import *
 from toolbox import *
+from functools import wraps
+from flask_login import *
 
 LoginAPI = Blueprint('loginapi', __name__)
 
+@LoginAPI.before_request
+def load_user():
+    g.user = None
+
+##function wrappers
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('/login', next = request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+##routes
 @LoginAPI.route('/health', methods=['GET'])
 def health():
     return jsonify({"status": "ok"}), 200 
 
-##############################    register account    ##############################
+##wrapper test
+@LoginAPI.route('/loginTest', methods=['GET'])
+@login_required
+def secretPage():
+    return jsonify({"secret": "found"}), 418 
+
+
+##############################    account registration    ##############################
 @LoginAPI.route("/register", methods=['POST'])
 def Register():
     data = request.get_json()
@@ -26,6 +49,8 @@ def Register():
         }), 401
     #hash password with pepper, salt and something else
     #due to the userid being autoincrement, the user id does not have to be added - just add the username and password
+
+    #before prod deployment implement salting and peppering password before hash
     hashedInputPassword = bcrypt.generate_password_hash(inputPassword).decode('utf-8')
 
     newUser = User_Profiles( 
@@ -33,6 +58,7 @@ def Register():
         password = hashedInputPassword
     )
 
+    #add user to db
     db.session.add(newUser)
     db.session.commit()
 
@@ -45,11 +71,13 @@ def Register():
 
 @LoginAPI.route("/login", methods=['POST'])
 def Login():
-    currentTime = datetime.now().hour
-    match currentTime:
-        case currentTime if currentTime >= 0 and currentTime < 12:
-            return "Good morning nerd ฅ^•ﻌ•^ฅ"
-        case currentTime if currentTime >= 12 and currentTime < 19:
-            return "Good afternoon nerd ฅ^•ﻌ•^ฅ"
-        case _:
-            return "Good evening nerd ฅ^•ﻌ•^ฅ"
+    data = request.get_json()
+    inputUsername = data.get('inputUsername')
+    inputPassword = data.get('inputPassword')
+    foundUser = FindUser(inputUsername)
+    if foundUser:
+        if bcrypt.check_password_hash(foundUser.password, inputPassword):
+            g.User = foundUser
+            return jsonify({"success" : "You have successfully logged in!"}), 201
+        return jsonify({"error": "Incorrect password."}), 401
+    return jsonify({"error": "user does not exist."}), 404 

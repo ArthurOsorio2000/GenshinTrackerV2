@@ -4,7 +4,7 @@ from toolbox import bcrypt
 from database import db
 
 from dotenv import load_dotenv
-from flask import Flask
+from flask import *
 import os
 
 def create_app():
@@ -13,7 +13,12 @@ def create_app():
 
     app = Flask(__name__)
 
+    @app.before_request
+    def load_user():
+        g.user = None
+
     bcrypt.init_app(app)
+    
 
     #use below app.config instead for direct connection to database without hidden information - be careful when pushing to github
 
