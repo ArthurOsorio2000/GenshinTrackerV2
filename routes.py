@@ -91,7 +91,8 @@ def GetUserChars(searchuserid):
         ##return a jsonified for loop of all queried data
         ###intake a title
         ###intake a list of two item tuples - a string and an id for the codes in successful query
-        ##
+        ##if the length is not 0, for loop through the query processing a row for each tuple detail
+        #if the length is 0, return a custom 404 error message
 
         if(len(foundUserOwnedChars) != 0):
             #output if user has one or more characters
@@ -142,7 +143,7 @@ def GetUserCharacterTracking(searchuserid):
     }), 404
 
 ################################################      Return All Functions     ################################################ 
-#return all characters
+#return all characters and details
 @api.route('/getallchars', methods=['GET'])
 def test1():
     return 0
