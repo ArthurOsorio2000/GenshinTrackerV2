@@ -93,8 +93,8 @@ class Character_Templates(db.Model):
     normalatk_name = db.Column(db.String(255))
     skill_name = db.Column(db.String(255))
     burst_name = db.Column(db.String(255))
-    talent_id = db.Column(db.Integer, db.ForeignKey('talentbooks.talent_id'), nullable = False)
-    weapon_id = db.Column(db.Integer, db.ForeignKey('weapontypes.weapon_id'), nullable = False)
+    talent_id = db.Column(db.Integer, db.ForeignKey('talent_books.talent_id'), nullable = False)
+    weapon_id = db.Column(db.Integer, db.ForeignKey('weapon_types.weapon_id'), nullable = False)
     region_id = db.Column(db.Integer, db.ForeignKey('regions.region_id'), nullable = False)
 
     def __repr__(self):
@@ -116,8 +116,8 @@ class Character_Templates(db.Model):
 class User_Characters(db.Model):
     __tablename__ = "user_characters"
 
-    user_id = db.Column(db.Integer, primary_key = True)
-    char_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_profiles.user_id'), primary_key = True)
+    char_id = db.Column(db.Integer, db.ForeignKey('character_templates.char_id'), primary_key = True)
     is_tracked = db.Column(db.Boolean, nullable = False)
     char_level = db.Column(db.String(255))
     normalatk_level = db.Column(db.Integer)

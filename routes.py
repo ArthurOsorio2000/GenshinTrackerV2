@@ -149,9 +149,44 @@ def GetAllChars():
     return 0
 
 #return details of all user owned characters
-@api.route('/<string:searchuserid>/getalluserchars', methods=['GET'])
-def test2():
-    return 0
+@api.route('/<string:searchuserid>/getallusercharacters', methods=['GET'])
+def GetAllUserCharacters(searchuserid):
+    foundUser = FindUser(searchuserid)
+    if (foundUser):
+        foundUserOwnedChars = db.session.query(
+            User_Characters, Character_Templates
+            #, Talent_Books, Regions, Weapon_Types, User_Profiles
+            ).join(
+                Character_Templates, User_Characters.char_id == Character_Templates.char_id
+            ).filter(
+                User_Characters.user_id == foundUser.user_id
+            ).all()
+        
+        if(len(foundUserOwnedChars) != 0):
+            #output if user has one or more characters
+            return jsonify({
+                #information to return
+                'username' : foundUser.username, #<-- probably not necessary info
+                'tracked user characters': [
+                    {
+                        'char id & profile pic path': UserCharacter.User_Characters.char_id,
+                        'char name': UserCharacter.Character_Templates.char_name,
+                        'tracked': UserCharacter.User_Characters.is_tracked,
+                        'character level' : UserCharacter.User_Characters.char_level,
+                        'normal attack level' : UserCharacter.User_Characters.normalatk_level,
+                        'skill level' : UserCharacter.User_Characters.skill_level,
+                        'burst level' : UserCharacter.User_Characters.burst_level,
+                    }for UserCharacter in foundUserOwnedChars
+                ]
+            })
+        #output if length of owned characters is 0
+        return jsonify({
+        'error': 'No characters owned.'
+    }), 404
+    #output if user does not exist
+    return jsonify({
+        'error': 'User not found.'
+    }), 404
 
 #prioritising tracked characters can be done in the frontend I think
 
