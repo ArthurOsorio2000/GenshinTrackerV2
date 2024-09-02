@@ -1,15 +1,19 @@
-import os
-from dotenv import load_dotenv
-from flask import Flask
 from routes_genshintracker import GenshinTrackerAPI
 from routes_login import LoginAPI
+from toolbox import bcrypt
 from database import db
+
+from dotenv import load_dotenv
+from flask import Flask
+import os
 
 def create_app():
     #create connection to mysql database
     load_dotenv()  # Load environment variables from .env file to protect user details
 
     app = Flask(__name__)
+
+    bcrypt.init_app(app)
 
     #use below app.config instead for direct connection to database without hidden information - be careful when pushing to github
 

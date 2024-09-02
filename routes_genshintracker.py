@@ -1,5 +1,5 @@
-from sqlalchemy import *
 from flask import Blueprint, jsonify
+from sqlalchemy import *
 from database import *
 from toolbox import *
 
@@ -20,7 +20,7 @@ def Index():
 
 #routing for all in a table
 ##data listing routes for testing:
-@GenshinTrackerAPI.route('/userprofiles')
+@GenshinTrackerAPI.route('/getallusers')
 def GetUserProfiles():
     allUsers = User_Profiles.query.all()
     return jsonify({'user profiles:': [user.username for user in allUsers]})
@@ -67,7 +67,7 @@ def GetUserCharacters():
     })
 
 #get user
-@GenshinTrackerAPI.route('/getuser/<string:searchuserid>', methods=['GET'])
+@GenshinTrackerAPI.route('/<string:searchuserid>/getuser', methods=['GET'])
 def GetUser(searchuserid):
     founduser = FindUser(searchuserid)
     #output if user is found

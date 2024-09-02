@@ -1,5 +1,5 @@
+from flask import Blueprint, jsonify, request, current_app
 from sqlalchemy import *
-from flask import Blueprint, jsonify, request
 from database import *
 from toolbox import *
 
@@ -13,27 +13,31 @@ def health():
 @LoginAPI.route("/register", methods=['POST'])
 def Register():
     data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    passwordVerify = data.get('passwordVerify')
+    inputUsername = data.get('inputUsername')
+    inputPassword = data.get('inputPassword')
+    verifyInputPassword = data.get('verifyInputPassword')
     #free username verification
-    userExists = db.session.query(User_Profiles).filter(
-        User_Profiles.username == username
-    ).first()
-    if userExists:
+    if FindUser(inputUsername):
         return jsonify({'Conflict': 'Username already exsits.'}), 409
     #matching password verification
-    if password != passwordVerify:
+    if inputPassword != verifyInputPassword:
         return jsonify({
         'Unauthorized': 'Passwords did not match.'
         }), 401
-    #pass only if username does not already exist and passwords match
     #hash password with pepper, salt and something else
-    #give user_id - make sure the user ID does not change. optionally if user is missing, instead of getting length of users+1,
-    #take the empty user id first, before using userlength+1
-    
+    #due to the userid being autoincrement, the user id does not have to be added - just add the username and password
+    hashedInputPassword = bcrypt.generate_password_hash(inputPassword).decode('utf-8')
+
+    newUser = User_Profiles( 
+        username = inputUsername,
+        password = hashedInputPassword
+    )
+
+    db.session.add(newUser)
+    db.session.commit()
+
     return jsonify({
-        'success': 'User: [' + username + '] created!'
+        'success': 'User: [' + inputUsername + '] created!'
         }), 201
 
 

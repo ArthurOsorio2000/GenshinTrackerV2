@@ -14,9 +14,9 @@ db = SQLAlchemy()
 class User_Profiles(db.Model):
     __tablename__ = "user_profiles"
 
-    user_id = db.Column(db.Integer, primary_key = True, nullable = False)
+    user_id = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
     username = db.Column(db.String(255), nullable = False)
-
+    password = db.Column(db.String(255), nullable = False)
     def __repr__(self):
         return f'<User id {self.user_id} | Username: {self.username}>'
 

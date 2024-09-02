@@ -3,22 +3,35 @@
 ###Get Health
 GET {{baseUrl}}/health
 
-###Password testing
-POST {{baseUrl}}/register
-Content-Type: application/json
-
-{
-    "username": "test",
-    "password": "test1",
-    "passwordVerify": "test1"
-}
-
 ###Positive testing: user already exists
 POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-    "username": "Arthur",
-    "password": "test1",
-    "passwordVerify": "test1"
+    "inputUsername": "Arthur",
+    "inputPassword": "test1",
+    "verifyInputPassword": "test1"
 }
+
+###Negative testing: passwords do not match
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "inputUsername": "test",
+    "inputPassword": "test1",
+    "verifyInputPassword": "nottest2"
+}
+
+###User creation testing
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "inputUsername": "test1",
+    "inputPassword": "test1",
+    "verifyInputPassword": "test1"
+}
+
+###Get All Users
+GET {{baseUrl}}/getallusers
