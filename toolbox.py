@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 #initialise bcrypt in an external file because my code is throwing a tantrum
 bcrypt = Bcrypt()
 
+
 #genshintracker - find user based on UID and return either user info or None
 def FindUserID(searchuserid):
     founduser = (

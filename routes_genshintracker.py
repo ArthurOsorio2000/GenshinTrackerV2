@@ -5,6 +5,8 @@ from toolbox import *
 
 GenshinTrackerAPI = Blueprint('genshintrackerapi', __name__)
 
+
+
 ##routes
 ##################################       index page and datetime testing:       ##################################
 @GenshinTrackerAPI.route("/")

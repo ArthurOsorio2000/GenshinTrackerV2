@@ -4,7 +4,7 @@ from toolbox import bcrypt
 from database import db
 
 from dotenv import load_dotenv
-from flask import *
+from flask import Flask
 import os
 
 def create_app():
@@ -12,10 +12,6 @@ def create_app():
     load_dotenv()  # Load environment variables from .env file to protect user details
 
     app = Flask(__name__)
-
-    @app.before_request
-    def load_user():
-        g.user = None
 
     bcrypt.init_app(app)
     
