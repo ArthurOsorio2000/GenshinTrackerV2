@@ -145,13 +145,15 @@ def GetUserCharacterTracking(searchuserid):
 ################################################      Return All Functions     ################################################ 
 #return all characters and details
 @api.route('/getallchars', methods=['GET'])
-def test1():
+def GetAllChars():
     return 0
 
 #return details of all user owned characters
 @api.route('/<string:searchuserid>/getalluserchars', methods=['GET'])
 def test2():
     return 0
+
+#prioritising tracked characters can be done in the frontend I think
 
 ################################################      Toolbox Functions      ##################################################
 #intake a user id (1001, 1002, 1003 etc)
