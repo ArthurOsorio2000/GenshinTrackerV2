@@ -1,14 +1,13 @@
-from datetime import datetime
 from sqlalchemy import *
 from flask import Blueprint, jsonify
 from database import *
 from toolbox import *
 
-api = Blueprint('api', __name__)
+GenshinTrackerAPI = Blueprint('genshintrackerapi', __name__)
 
 ##routes
 ##################################       index page and datetime testing:       ##################################
-@api.route("/")
+@GenshinTrackerAPI.route("/")
 def Index():
     currentTime = datetime.now().hour
     match currentTime:
@@ -21,13 +20,13 @@ def Index():
 
 #routing for all in a table
 ##data listing routes for testing:
-@api.route('/userprofiles')
+@GenshinTrackerAPI.route('/userprofiles')
 def GetUserProfiles():
     allUsers = User_Profiles.query.all()
     return jsonify({'user profiles:': [user.username for user in allUsers]})
 
 #get all character templates and details (presents in unordered JSON)
-@api.route('/charactertemplates', methods = ['GET'])
+@GenshinTrackerAPI.route('/charactertemplates', methods = ['GET'])
 def GetCharacterTemplates():
     allCharacterTemplates = Character_Templates.query.all()
     return jsonify({
@@ -55,7 +54,7 @@ def GetCharacterTemplates():
 #################################################       user characters       #################################################
 #testing user characters
 #get all user characters
-@api.route('/usercharacters')
+@GenshinTrackerAPI.route('/usercharacters')
 def GetUserCharacters():
     userCharacters = User_Characters.query.all() #<-- I might have to user inner joins to create a table with the relevant information
     return jsonify({
@@ -68,7 +67,7 @@ def GetUserCharacters():
     })
 
 #get user
-@api.route('/getuser/<string:searchuserid>', methods=['GET'])
+@GenshinTrackerAPI.route('/getuser/<string:searchuserid>', methods=['GET'])
 def GetUser(searchuserid):
     founduser = FindUser(searchuserid)
     #output if user is found
@@ -82,7 +81,7 @@ def GetUser(searchuserid):
     }), 404
 
 #get all selected user's owned characters
-@api.route('/<string:searchuserid>/getuserchars', methods=['GET'])
+@GenshinTrackerAPI.route('/<string:searchuserid>/getuserchars', methods=['GET'])
 def GetUserChars(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):
@@ -117,7 +116,7 @@ def GetUserChars(searchuserid):
 
 #testing joins
 #get all characters that user has marked as tracked
-@api.route('/<string:searchuserid>/gettrackeduserchars', methods=['GET'])
+@GenshinTrackerAPI.route('/<string:searchuserid>/gettrackeduserchars', methods=['GET'])
 def GetUserCharacterTracking(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):
@@ -144,12 +143,12 @@ def GetUserCharacterTracking(searchuserid):
 
 ################################################      Return All Functions     ################################################ 
 #return all characters and details
-@api.route('/getallchars', methods=['GET'])
+@GenshinTrackerAPI.route('/getallchars', methods=['GET'])
 def GetAllChars():
     return 0
 
 #return details of all user owned characters
-@api.route('/<string:searchuserid>/getallusercharacters', methods=['GET'])
+@GenshinTrackerAPI.route('/<string:searchuserid>/getallusercharacters', methods=['GET'])
 def GetAllUserCharacters(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):

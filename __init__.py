@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask
-from routes import api
+from routes_genshintracker import GenshinTrackerAPI
+from routes_login import LoginAPI
 from database import db
 
 def create_app():
@@ -11,6 +12,7 @@ def create_app():
     app = Flask(__name__)
 
     #use below app.config instead for direct connection to database without hidden information - be careful when pushing to github
+
     ##############!!!!!!!!!!!!!!!!BE CAREFUL NOT TO UPLOAD PASSWORD TO GITHUB!!!!!!!!!!!!!!!!##############
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://<username>:<password>@<host>/<dbname>'
     ##############!!!!!!!!!!!!!!!!BE CAREFUL NOT TO UPLOAD PASSWORD TO GITHUB!!!!!!!!!!!!!!!!##############
@@ -24,6 +26,7 @@ def create_app():
     db.init_app(app)
 
     #register api routes through blueprint from routes | api = blueprint
-    app.register_blueprint(api)
+    app.register_blueprint(GenshinTrackerAPI)
+    app.register_blueprint(LoginAPI)
 
     return app
