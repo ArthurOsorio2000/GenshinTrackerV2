@@ -9,6 +9,11 @@ GET {{baseUrl}}/loginTest
 ###get current user
 GET {{baseUrl}}/getcurrentuser
 
+###get global user's characters
+GET {{baseUrl}}/getglobaluserchars
+
+################### user route testing #####################
+
 ###Positive testing: user already exists
 POST {{baseUrl}}/register
 Content-Type: application/json
@@ -47,6 +52,9 @@ Content-Type: application/json
     "inputUsername": "Cheesey331",
     "inputPassword": "password"
 }
+
+###User logout
+POST {{baseUrl}}/logout
 
 #admin tools
 ###Get All Users

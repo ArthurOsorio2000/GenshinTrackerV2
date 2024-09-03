@@ -4,16 +4,8 @@ from online_database import *
 from toolbox import *
 from flask_login import *
 
-
 LoginAPI = Blueprint('loginapi', __name__)
 
-@LoginAPI.before_request
-def load_user():
-    user_id = session.get('user_id')
-    if user_id:
-        g.user = User_Profiles.query.get(user_id)  # Fetch the user from the database
-    else:
-        g.user = None  # No user logged in
 ##routes
 @LoginAPI.route('/health', methods=['GET'])
 def health():
@@ -28,19 +20,23 @@ def secretPage():
 ##guser test
 @LoginAPI.route('/getcurrentuser', methods=['GET'])
 def returnGUser():
-    return jsonify({"User": g.user.username}), 418
+    if g.user:
+        return jsonify({"User": g.user.username}), 418
+    return jsonify({"User": "guest"}), 418
+
 
 
 ##############################    account registration    ##############################
 @LoginAPI.route("/register", methods=['POST'])
 def Register():
+    #get data from register data stream
     data = request.get_json()
     inputUsername = data.get('inputUsername')
     inputPassword = data.get('inputPassword')
     verifyInputPassword = data.get('verifyInputPassword')
-    #free username verification
+    #query db if username has already been taken
     if FindUser(inputUsername):
-        return jsonify({'Conflict': 'Username already exsits.'}), 409
+        return jsonify({'Conflict': 'Username has already been taken :( sorryyyyyyyy'}), 409
     #matching password verification
     if inputPassword != verifyInputPassword:
         return jsonify({
@@ -68,16 +64,27 @@ def Register():
 
 
 ##############################    login    ##############################
-
 @LoginAPI.route("/login", methods=['POST'])
 def Login():
+    #get login information from login screen data stream
     data = request.get_json()
     inputUsername = data.get('inputUsername')
     inputPassword = data.get('inputPassword')
+    #look for existing user in db
     foundUser = FindUser(inputUsername)
     if foundUser:
         if bcrypt.check_password_hash(foundUser.password, inputPassword):
             session['user_id'] = foundUser.user_id
-            return jsonify({"success" : "User [" + g.user.username + "] has successfully logged in!"}), 201
+            return jsonify({"success" : "User [" + foundUser.username + "] has successfully logged in!"}), 201
+        #user input wrong password
         return jsonify({"error": "Incorrect password."}), 401
+    #user not found
     return jsonify({"error": "user does not exist."}), 404 
+
+
+##############################    logout    ##############################
+@LoginAPI.route('/logout', methods=['POST'])
+def logout():
+    # Clear the session data
+    session.clear()
+    return jsonify({"success" : "You have logged out successfully. See you again!"}), 201

@@ -82,6 +82,34 @@ def GetUser(searchuserid):
         'error': 'User not found.'
     }), 404
 
+#get g.user characters
+#get all selected user's owned characters
+@GenshinTrackerAPI.route('/getglobaluserchars', methods=['GET'])
+def GetGlobalUserChars():
+    foundUserOwnedChars = db.session.query(User_Characters).filter_by(user_id = g.user.user_id).all()
+    #in order to lower code repetition, create a function to take a query and return a jsonify list
+    ##return a jsonified for loop of all queried data
+    ###intake a title
+    ###intake a list of two item tuples - a string and an id for the codes in successful query
+    ##if the length is not 0, for loop through the query processing a row for each tuple detail
+    #if the length is 0, return a custom 404 error message
+
+    if(len(foundUserOwnedChars) != 0):
+        #output if user has one or more characters
+        return jsonify({
+            'username' : g.user.username,
+            #information to return
+            'user characters': [
+                {
+                    'char id': UserCharacter.char_id
+                }for UserCharacter in foundUserOwnedChars
+            ]
+        })
+    #output if length of owned characters is 0
+    return jsonify({
+    'error': 'No characters owned.'
+}), 404
+
 #get all selected user's owned characters
 @GenshinTrackerAPI.route('/<string:searchuserid>/getuserchars', methods=['GET'])
 def GetUserChars(searchuserid):

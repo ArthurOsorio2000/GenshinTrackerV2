@@ -1,10 +1,10 @@
 from routes_genshintracker import GenshinTrackerAPI
 from routes_login import LoginAPI
 from toolbox import bcrypt
-from online_database import db
+from online_database import db, User_Profiles
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import *
-from flask import Flask
+from flask import *
 from dotenv import load_dotenv
 import os
 
@@ -14,6 +14,7 @@ def create_app():
     login_manager = LoginManager() #create login manager
 
     app = Flask(__name__)
+    
 
     bcrypt.init_app(app)
 
@@ -36,6 +37,15 @@ def create_app():
     #register api routes through blueprint from routes | api = blueprint
     app.register_blueprint(GenshinTrackerAPI)
     app.register_blueprint(LoginAPI)
+
+    # Before request function
+    @app.before_request
+    def load_user():
+        user_id = session.get('user_id')
+        if user_id:
+            g.user = User_Profiles.query.get(user_id)  # Fetch user from the database
+        else:
+            g.user = None
 
     # Quick test configuration. Please use proper Flask configuration options
     # in production settings, and use a separate file or environment variables
