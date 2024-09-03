@@ -13,28 +13,7 @@ GET {{baseUrl}}/getcurrentuser
 GET {{baseUrl}}/getglobaluserchars
 
 ################### user route testing #####################
-
-###Positive testing: user already exists
-POST {{baseUrl}}/register
-Content-Type: application/json
-
-{
-    "inputUsername": "Arthur",
-    "inputPassword": "test1",
-    "verifyInputPassword": "test1"
-}
-
-###Negative testing: passwords do not match
-POST {{baseUrl}}/register
-Content-Type: application/json
-
-{
-    "inputUsername": "test",
-    "inputPassword": "test1",
-    "verifyInputPassword": "nottest2"
-}
-
-###User creation testing
+###Create new user
 POST {{baseUrl}}/register
 Content-Type: application/json
 
@@ -53,9 +32,11 @@ Content-Type: application/json
     "inputPassword": "password"
 }
 
-###User logout
+###Log out of current user and wipe global user
 POST {{baseUrl}}/logout
 
 #admin tools
 ###Get All Users
 GET {{baseUrl}}/getallusers
+
+################### Add new user character to user #####################
