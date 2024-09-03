@@ -6,6 +6,9 @@ GET {{baseUrl}}/health
 ###test login wrapper
 GET {{baseUrl}}/loginTest
 
+###get current user
+GET {{baseUrl}}/getcurrentuser
+
 ###Positive testing: user already exists
 POST {{baseUrl}}/register
 Content-Type: application/json
@@ -45,5 +48,6 @@ Content-Type: application/json
     "inputPassword": "password"
 }
 
+#admin tools
 ###Get All Users
 GET {{baseUrl}}/getallusers

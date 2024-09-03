@@ -17,6 +17,7 @@ class User_Profiles(db.Model):
     user_id = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
     username = db.Column(db.String(255), nullable = False)
     password = db.Column(db.String(255), nullable = False)
+    role = db.Column(db.String(63), nullable=False, default='guest')
     def __repr__(self):
         return f'<User id {self.user_id} | Username: {self.username}>'
 

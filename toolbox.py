@@ -1,13 +1,16 @@
 from datetime import datetime
 from sqlalchemy import *
-from flask import Blueprint, jsonify
-from database import *
+from flask import *
+from functools import wraps
+from online_database import *
 from flask_bcrypt import Bcrypt
 
+#####################################      initialisations      #####################################
 #initialise bcrypt in an external file because my code is throwing a tantrum
 bcrypt = Bcrypt()
 
 
+##########################################      tools      ##########################################
 #genshintracker - find user based on UID and return either user info or None
 def FindUserID(searchuserid):
     founduser = (
@@ -29,3 +32,12 @@ def FindUser(searchusername):
         .first()
     )
     return founduser
+
+##function wrappers
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('login', next = request.url))
+        return f(*args, **kwargs)
+    return decorated_function

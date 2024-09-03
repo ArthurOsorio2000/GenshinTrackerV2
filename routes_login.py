@@ -1,25 +1,19 @@
 from flask import *
 from sqlalchemy import *
-from database import *
+from online_database import *
 from toolbox import *
-from functools import wraps
 from flask_login import *
+
 
 LoginAPI = Blueprint('loginapi', __name__)
 
 @LoginAPI.before_request
 def load_user():
-    g.user = None
-
-##function wrappers
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if g.user is None:
-            return redirect(url_for('login', next = request.url))
-        return f(*args, **kwargs)
-    return decorated_function
-
+    user_id = session.get('user_id')
+    if user_id:
+        g.user = User_Profiles.query.get(user_id)  # Fetch the user from the database
+    else:
+        g.user = None  # No user logged in
 ##routes
 @LoginAPI.route('/health', methods=['GET'])
 def health():
@@ -30,6 +24,11 @@ def health():
 @login_required
 def secretPage():
     return jsonify({"secret": "found"}), 418 
+
+##guser test
+@LoginAPI.route('/getcurrentuser', methods=['GET'])
+def returnGUser():
+    return jsonify({"User": g.user.username}), 418
 
 
 ##############################    account registration    ##############################
@@ -55,7 +54,8 @@ def Register():
 
     newUser = User_Profiles( 
         username = inputUsername,
-        password = hashedInputPassword
+        password = hashedInputPassword,
+        role = 'user'
     )
 
     #add user to db
@@ -77,7 +77,7 @@ def Login():
     foundUser = FindUser(inputUsername)
     if foundUser:
         if bcrypt.check_password_hash(foundUser.password, inputPassword):
-            g.User = foundUser
-            return jsonify({"success" : "You have successfully logged in!"}), 201
+            session['user_id'] = foundUser.user_id
+            return jsonify({"success" : "User [" + g.user.username + "] has successfully logged in!"}), 201
         return jsonify({"error": "Incorrect password."}), 401
     return jsonify({"error": "user does not exist."}), 404 

@@ -1,6 +1,6 @@
 from flask import *
 from sqlalchemy import *
-from database import *
+from online_database import *
 from toolbox import *
 
 GenshinTrackerAPI = Blueprint('genshintrackerapi', __name__)
