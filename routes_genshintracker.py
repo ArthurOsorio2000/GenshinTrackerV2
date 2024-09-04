@@ -220,5 +220,21 @@ def GetAllUserCharacters(searchuserid):
 #prioritising tracked characters can be done in the frontend I think
 
 ################################################      Toolbox Functions      ##################################################
-#intake a user id (1001, 1002, 1003 etc)
-#return either a user object from the database, or None/False
+##sync offline database regions with online database
+####rename to get new regions?
+@GenshinTrackerAPI.route('/syncregions', methods=['GET'])
+def SyncRegions():
+    newRegions = SyncOfflineDB_Regions()
+    match newRegions:
+        case newRegions if newRegions[0] == True:
+            return jsonify({
+                'Success': 'New Regions Added!'
+            }), 201
+        case newRegions if newRegions[1] == True:
+            return jsonify({
+                    'Success': 'Dropped Regions have been deleted :('
+                }), 201
+        case _:
+            return jsonify({
+                    'Success': 'No New Updates Found :|'
+                }), 201

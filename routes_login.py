@@ -24,8 +24,6 @@ def returnGUser():
         return jsonify({"User": g.user.username}), 418
     return jsonify({"User": "guest"}), 418
 
-
-
 ##############################    account registration    ##############################
 @LoginAPI.route("/register", methods=['POST'])
 def Register():

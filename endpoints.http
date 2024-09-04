@@ -40,3 +40,7 @@ POST {{baseUrl}}/logout
 GET {{baseUrl}}/getallusers
 
 ################### Add new user character to user #####################
+
+
+##################sync offline db with online regions
+GET {{baseUrl}}/syncregions
