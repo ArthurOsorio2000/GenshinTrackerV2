@@ -222,19 +222,20 @@ def GetAllUserCharacters(searchuserid):
 ################################################      Toolbox Functions      ##################################################
 ##sync offline database regions with online database
 ####rename to get new regions?
-@GenshinTrackerAPI.route('/syncregions', methods=['GET'])
-def SyncRegions():
-    newRegions = SyncOfflineDB_Regions()
-    match newRegions:
-        case newRegions if newRegions[0] == True:
-            return jsonify({
-                'Success': 'New Regions Added!'
-            }), 201
-        case newRegions if newRegions[1] == True:
-            return jsonify({
-                    'Success': 'Dropped Regions have been deleted :('
-                }), 201
-        case _:
-            return jsonify({
-                    'Success': 'No New Updates Found :|'
-                }), 201
+@GenshinTrackerAPI.route('/syncdown', methods=['GET'])
+def SyncOnlineToOfflineDB():
+    newRegions = SyncOfflineDB()
+    ##changelogs
+    print(newRegions)
+    if any(newRegions) == True:
+        return jsonify({
+        'New Regions': newRegions[0],
+        'Deleted Regions': newRegions[1],
+        'New Talent Books': newRegions[2],
+        'Deleted Talent Books': newRegions[3],
+        'New Characters': newRegions[4],
+        'Deleted Characters': newRegions[5],
+    }), 201
+    return jsonify({
+        'Success': 'No updates found :('
+    }), 201

@@ -43,4 +43,4 @@ GET {{baseUrl}}/getallusers
 
 
 ##################sync offline db with online regions
-GET {{baseUrl}}/syncregions
+GET {{baseUrl}}/syncdown

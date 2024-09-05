@@ -12,7 +12,7 @@ db = SQLAlchemy()
 # );
 
 class User_Profiles(db.Model):
-    __tablename__ = "user_profiles"
+    __tablename__ = "User_Profiles"
 
     user_id = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement = True)
     username = db.Column(db.String(255), nullable = False)
@@ -29,7 +29,7 @@ class User_Profiles(db.Model):
 # );
 
 class Weapon_Types(db.Model):
-    __tablename__ = "weapon_types"
+    __tablename__ = "Weapon_Types"
 
     weapon_id = db.Column(db.Integer, primary_key = True, nullable = False)
     weapon_type = db.Column(db.String(255))
@@ -44,7 +44,7 @@ class Weapon_Types(db.Model):
 # );
 
 class Regions(db.Model):
-    __tablename__ = "regions"
+    __tablename__ = "Regions"
 
     region_id = db.Column(db.Integer, primary_key = True)
     region_name = db.Column(db.String(255))
@@ -61,7 +61,7 @@ class Regions(db.Model):
 # );
 
 class Talent_Books(db.Model):
-    __tablename__ = "talent_books"
+    __tablename__ = "Talent_Books"
 
     talent_id = db.Column(db.Integer, primary_key = True)
     talent_name = db.Column(db.String(255))
@@ -87,7 +87,7 @@ class Talent_Books(db.Model):
 # );
 
 class Character_Templates(db.Model):
-    __tablename__ = "character_templates"
+    __tablename__ = "Character_Templates"
 
     char_id = db.Column(db.Integer, primary_key = True)
     char_name = db.Column(db.String(255), nullable = False)
@@ -115,7 +115,7 @@ class Character_Templates(db.Model):
 # );
 
 class User_Characters(db.Model):
-    __tablename__ = "user_characters"
+    __tablename__ = "User_Characters"
 
     user_id = db.Column(db.Integer, db.ForeignKey('user_profiles.user_id'), primary_key = True)
     char_id = db.Column(db.Integer, db.ForeignKey('character_templates.char_id'), primary_key = True)
