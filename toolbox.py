@@ -61,7 +61,7 @@ def SyncOfflineDB():
     talentUpdates = False
     talentDeletions = False
 
-    characterTemplatesUpdates = False
+    characterTemplateUpdates = False
     characterTemplateDeletions = False
     
     try:
@@ -69,12 +69,12 @@ def SyncOfflineDB():
         regionUpdates = UpdateRegions(onlineDBSession, offlineDBSession)
         #update talent books
         talentUpdates = UpdateTalentBooks(onlineDBSession, offlineDBSession)
-
         #update character templates
-
+        characterTemplateUpdates = UpdateCharacterTemplates(onlineDBSession, offlineDBSession)
 
         #compares rows to look for orphaned rows and delete them
         #do the same for talents and char templates
+
         #delete orphaned regions
         onlineRegionIDs = {row.region_id for row in onlineDBSession.query(Regions.region_id).all()}
         offlineRegionRows = offlineDBSession.query(Regions).all()
@@ -93,6 +93,15 @@ def SyncOfflineDB():
                 offlineDBSession.delete(row)
                 talentDeletions = True
 
+        #delete Arlecchino and her kids
+        onlinechartemplateIDs = {row.char_id for row in onlineDBSession.query(Character_Templates.char_id).all()}
+        offlineCharacterTemplateRows = offlineDBSession.query(Character_Templates).all()
+
+        for row in offlineCharacterTemplateRows:
+            if row.char_id not in onlinechartemplateIDs:
+                offlineDBSession.delete(row)
+                characterTemplateDeletions = True
+
         # Commit the changes to SQLite
         offlineDBSession.commit()
 
@@ -104,11 +113,11 @@ def SyncOfflineDB():
         # Close sessions
         onlineDBSession.close()
         offlineDBSession.close()
-        updateFlag = (
+        updateFlag = [
             regionUpdates, regionDeletions,
             talentUpdates, talentDeletions,
-            characterTemplatesUpdates, characterTemplateDeletions
-        )
+            characterTemplateUpdates, characterTemplateDeletions
+        ]
         return updateFlag
 
 
@@ -161,7 +170,39 @@ def UpdateTalentBooks(onlineDBSession, offlineDBSession):
             talentUpdates = True
     return talentUpdates
 
-
+#update talent books function
+def UpdateCharacterTemplates(onlineDBSession, offlineDBSession):
+    characterTemplateUpdates = False
+    onlineData = onlineDBSession.query(Character_Templates).all()
+    
+    for row in onlineData:
+        ##check if the record exists in sqlite
+        existingRow = offlineDBSession.query(Character_Templates).filter_by(char_id = row.char_id).first()
+        if existingRow:
+            # Update existing record
+                existingRow.char_id = row.char_id
+                existingRow.char_name = row.char_name
+                existingRow.normalatk_name = row.normalatk_name
+                existingRow.skill_name = row.skill_name
+                existingRow.burst_name = row.burst_name
+                existingRow.talent_id = row.talent_id
+                existingRow.weapon_id = row.weapon_id
+                existingRow.region_id = row.region_id
+        else:
+            #insert new character into char temp table
+            new_row = Character_Templates(
+                char_id = row.char_id,
+                char_name = row.char_name,
+                normalatk_name = row.normalatk_name,
+                skill_name = row.skill_name,
+                burst_name = row.burst_name,
+                talent_id = row.talent_id,
+                weapon_id = row.weapon_id,
+                region_id = row.region_id
+                )
+            offlineDBSession.add(new_row)
+            characterTemplateUpdates = True
+    return characterTemplateUpdates
 
 
 

@@ -25,8 +25,12 @@ def create_app():
     ##############!!!!!!!!!!!!!!!!BE CAREFUL NOT TO UPLOAD PASSWORD TO GITHUB!!!!!!!!!!!!!!!!##############
 
     #connect to Database URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('GENSHINPROJECTV2_DATABASE_URL')
-    app.config['SQLALCHEMY_BINDS'] = {'sqlite_db': 'sqlite:///local_db.sqlite3'}
+    DatabaseURI = str(os.getenv('GENSHINPROJECTV2_DATABASE_URL'))
+    app.config['SQLALCHEMY_DATABASE_URI'] = DatabaseURI
+    app.config['SQLALCHEMY_BINDS'] = {
+        'sqlite_db': 'sqlite:///local_db.sqlite3',
+        'default' : DatabaseURI
+        }
     #turn off tracking to lower resource allocation
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

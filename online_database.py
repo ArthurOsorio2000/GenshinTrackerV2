@@ -94,9 +94,9 @@ class Character_Templates(db.Model):
     normalatk_name = db.Column(db.String(255))
     skill_name = db.Column(db.String(255))
     burst_name = db.Column(db.String(255))
-    talent_id = db.Column(db.Integer, db.ForeignKey('talent_books.talent_id'), nullable = False)
-    weapon_id = db.Column(db.Integer, db.ForeignKey('weapon_types.weapon_id'), nullable = False)
-    region_id = db.Column(db.Integer, db.ForeignKey('regions.region_id'), nullable = False)
+    talent_id = db.Column(db.Integer, db.ForeignKey('Talent_Books.talent_id'), nullable = False)
+    weapon_id = db.Column(db.Integer, db.ForeignKey('Weapon_Types.weapon_id'), nullable = False)
+    region_id = db.Column(db.Integer, db.ForeignKey('Regions.region_id'), nullable = False)
 
     def __repr__(self):
         return f'<character id {self.char_id} | character name: {self.char_name} \nnormal attack name: {self.normalatk_name} | skill name: {self.skill_name} | burst name: {self.burst_name} \ntalent id {self.talent_id} | weapon id: {self.weapon_id} | region id: {self.region_id}>'

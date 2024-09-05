@@ -224,17 +224,16 @@ def GetAllUserCharacters(searchuserid):
 ####rename to get new regions?
 @GenshinTrackerAPI.route('/syncdown', methods=['GET'])
 def SyncOnlineToOfflineDB():
-    newRegions = SyncOfflineDB()
+    changeLog = SyncOfflineDB()
     ##changelogs
-    print(newRegions)
-    if any(newRegions) == True:
+    if any(changeLog) == True:
         return jsonify({
-        'New Regions': newRegions[0],
-        'Deleted Regions': newRegions[1],
-        'New Talent Books': newRegions[2],
-        'Deleted Talent Books': newRegions[3],
-        'New Characters': newRegions[4],
-        'Deleted Characters': newRegions[5],
+        'New Regions': changeLog[0],
+        'Deleted Regions': changeLog[1],
+        'New Talent Books': changeLog[2],
+        'Deleted Talent Books': changeLog[3],
+        'New Characters': changeLog[4],
+        'Deleted Characters': changeLog[5],
     }), 201
     return jsonify({
         'Success': 'No updates found :('
