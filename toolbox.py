@@ -43,6 +43,8 @@ def login_required(f):
     return decorated_function
 
 
+########################################      Offline Character Creation      #########################################
+
 ##########################################      Synchronisation Methods      ##########################################
 ##sync down from online database (mysql) to offline database (SQLite)
 #need to update for talent books and character templates as well

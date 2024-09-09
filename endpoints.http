@@ -40,7 +40,13 @@ POST {{baseUrl}}/logout
 GET {{baseUrl}}/getallusers
 
 ################### Add new user character to user #####################
+POST {{{{baseUrl}}}}/createNewOfflineCharacter
+Content-Type: application/json
 
+{
+    "inputUsername": "Hangyodon11",
+    "inputPassword": "hangyodon"
+}
 
 ##################sync offline db with online regions
 GET {{baseUrl}}/syncdown

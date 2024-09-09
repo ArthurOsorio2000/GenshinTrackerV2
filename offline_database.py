@@ -49,16 +49,14 @@ cursor.execute("""CREATE TABLE character_templates(
 ####and pull from offline default account?
 
 cursor.execute("""CREATE TABLE user_characters(
-	user_id INT NOT NULL,
-    char_id INT NOT NULL,
+    user_char_id INT NOT NULL,
     is_tracked BOOLEAN,
     char_level INT,
     normalatk_level INT,
     skill_level INT,
     burst_level INT,
-    PRIMARY KEY (user_id, char_id),
-    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
-	FOREIGN KEY (char_id) REFERENCES character_templates(char_id)
+    PRIMARY KEY (user_char_id),
+	FOREIGN KEY (user_char_id) REFERENCES character_templates(char_id)
 );""")
 
 cursor.execute("""INSERT INTO weapon_types(weapon_id, weapon_type)
