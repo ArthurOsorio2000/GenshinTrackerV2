@@ -18,9 +18,9 @@ POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-    "inputUsername": "Cheesey331",
-    "inputPassword": "password",
-    "verifyInputPassword": "password"
+    "inputUsername": "Hangyodon11",
+    "inputPassword": "hangyodon",
+    "verifyInputPassword": "hangyodon"
 }
 
 ###User login
@@ -28,8 +28,8 @@ POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-    "inputUsername": "Cheesey331",
-    "inputPassword": "password"
+    "inputUsername": "Hangyodon11",
+    "inputPassword": "hangyodon"
 }
 
 ###Log out of current user and wipe global user
@@ -44,3 +44,6 @@ GET {{baseUrl}}/getallusers
 
 ##################sync offline db with online regions
 GET {{baseUrl}}/syncdown
+
+###
+GET {{baseUrl}}/upload
