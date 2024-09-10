@@ -1,4 +1,5 @@
-from routes_genshintracker import GenshinTrackerAPI
+from routes_online_genshintracker import OnlineGenshinTrackerAPI
+from routes_offline_genshintracker import OfflineGenshinTrackerAPI
 from routes_login import LoginAPI
 from toolbox import bcrypt
 from online_database import db, User_Profiles
@@ -40,7 +41,8 @@ def create_app():
     login_manager.init_app(app)
 
     #register api routes through blueprint from routes | api = blueprint
-    app.register_blueprint(GenshinTrackerAPI)
+    app.register_blueprint(OnlineGenshinTrackerAPI)
+    app.register_blueprint(OfflineGenshinTrackerAPI)
     app.register_blueprint(LoginAPI)
 
     # Before request function

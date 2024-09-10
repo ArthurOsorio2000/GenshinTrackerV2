@@ -3,6 +3,9 @@
 ###Get Health
 GET {{baseUrl}}/health
 
+###Get offline routes health
+GET {{baseUrl}}/offlinehealth
+
 ###test login wrapper
 GET {{baseUrl}}/loginTest
 
@@ -40,12 +43,17 @@ POST {{baseUrl}}/logout
 GET {{baseUrl}}/getallusers
 
 ################### Add new user character to user #####################
-POST {{{{baseUrl}}}}/createNewOfflineCharacter
+###create new character in offline database
+POST {{baseUrl}}/offline/createnewchar
 Content-Type: application/json
 
 {
-    "inputUsername": "Hangyodon11",
-    "inputPassword": "hangyodon"
+    "inputUserCharID": "1",
+    "inputIsTracked": "False",
+    "inputCharLevel": "10",
+    "inputNormalAtkLevel": "1",
+    "inputSkillLevel": "2",
+    "inputBurstLevel": "4"
 }
 
 ##################sync offline db with online regions

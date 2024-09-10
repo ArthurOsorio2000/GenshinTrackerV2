@@ -3,11 +3,11 @@ from sqlalchemy import *
 from online_database import *
 from toolbox import *
 
-GenshinTrackerAPI = Blueprint('genshintrackerapi', __name__)
+OnlineGenshinTrackerAPI = Blueprint('onlinegenshintrackerapi', __name__)
 
 ##routes
 ##################################       index page and datetime testing:       ##################################
-@GenshinTrackerAPI.route("/")
+@OnlineGenshinTrackerAPI.route("/")
 def Index():
     currentTime = datetime.now().hour
     match currentTime:
@@ -20,13 +20,13 @@ def Index():
 
 #routing for all in a table
 ##data listing routes for testing:
-@GenshinTrackerAPI.route('/getallusers')
+@OnlineGenshinTrackerAPI.route('/getallusers')
 def GetUserProfiles():
     allUsers = User_Profiles.query.all()
     return jsonify({'user profiles:': [user.username for user in allUsers]})
 
 #get all character templates and details (presents in unordered JSON)
-@GenshinTrackerAPI.route('/charactertemplates', methods = ['GET'])
+@OnlineGenshinTrackerAPI.route('/charactertemplates', methods = ['GET'])
 def GetCharacterTemplates():
     allCharacterTemplates = Character_Templates.query.all()
     return jsonify({
@@ -54,7 +54,7 @@ def GetCharacterTemplates():
 #################################################       user characters       #################################################
 #testing user characters
 #get all user characters
-@GenshinTrackerAPI.route('/usercharacters')
+@OnlineGenshinTrackerAPI.route('/usercharacters')
 def GetUserCharacters():
     userCharacters = User_Characters.query.all() #<-- I might have to user inner joins to create a table with the relevant information
     return jsonify({
@@ -67,7 +67,7 @@ def GetUserCharacters():
     })
 
 #get user
-@GenshinTrackerAPI.route('/<string:searchuserid>/getuser', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/<string:searchuserid>/getuser', methods=['GET'])
 def GetUser(searchuserid):
     founduser = FindUser(searchuserid)
     #output if user is found
@@ -82,7 +82,7 @@ def GetUser(searchuserid):
 
 #get g.user characters
 #get all selected user's owned characters
-@GenshinTrackerAPI.route('/getglobaluserchars', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/getglobaluserchars', methods=['GET'])
 def GetGlobalUserChars():
     foundUserOwnedChars = db.session.query(User_Characters).filter_by(user_id = g.user.user_id).all()
     #in order to lower code repetition, create a function to take a query and return a jsonify list
@@ -109,7 +109,7 @@ def GetGlobalUserChars():
 }), 404
 
 #get all selected user's owned characters
-@GenshinTrackerAPI.route('/<string:searchuserid>/getuserchars', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/<string:searchuserid>/getuserchars', methods=['GET'])
 def GetUserChars(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):
@@ -144,7 +144,7 @@ def GetUserChars(searchuserid):
 
 #testing joins
 #get all characters that user has marked as tracked
-@GenshinTrackerAPI.route('/<string:searchuserid>/gettrackeduserchars', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/<string:searchuserid>/gettrackeduserchars', methods=['GET'])
 def GetUserCharacterTracking(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):
@@ -171,12 +171,12 @@ def GetUserCharacterTracking(searchuserid):
 
 ################################################      Return All Functions     ################################################ 
 #return all characters and details
-@GenshinTrackerAPI.route('/getallchars', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/getallchars', methods=['GET'])
 def GetAllChars():
     return 0
 
 #return details of all user owned characters
-@GenshinTrackerAPI.route('/<string:searchuserid>/getallusercharacters', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/<string:searchuserid>/getallusercharacters', methods=['GET'])
 def GetAllUserCharacters(searchuserid):
     foundUser = FindUser(searchuserid)
     if (foundUser):
@@ -220,7 +220,7 @@ def GetAllUserCharacters(searchuserid):
 ################################################      Toolbox Functions      ##################################################
 ##sync offline database regions with online database
 ####rename to get new regions?
-@GenshinTrackerAPI.route('/syncdown', methods=['GET'])
+@OnlineGenshinTrackerAPI.route('/syncdown', methods=['GET'])
 def SyncOnlineToOfflineDB():
     changeLog = SyncOfflineDB()
     ##changelogs

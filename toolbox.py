@@ -5,6 +5,7 @@ from flask import *
 from functools import wraps
 from online_database import *
 from flask_bcrypt import Bcrypt
+import sqlite3
 
 #####################################      initialisations      #####################################
 #initialise bcrypt in an external file because my code is throwing a tantrum
@@ -42,8 +43,25 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+##find if character exists in locally owned database - return character or None
+def offlineFindUserCharID(searchUCID):
+    connection = sqlite3.connect('local_db.sqlite3')
+    cursor = connection.cursor()
+
+    cursor.execute("""SELECT * FROM user_characters WHERE user_char_id = ?""", (searchUCID))
+    foundUserChar = cursor.fetchone()
+    ##temporary debugging prints
+    if foundUserChar:
+        print(foundUserChar[1])
+    else:
+        print("No existing user character in local database")
+    connection.close()    
+
+    return foundUserChar
+
 
 ########################################      Offline Character Creation      #########################################
+
 
 ##########################################      Synchronisation Methods      ##########################################
 ##sync down from online database (mysql) to offline database (SQLite)
