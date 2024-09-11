@@ -52,6 +52,14 @@ Content-Type: application/json
     "inputUserCharID": "1"
 }
 
+###remove character from owned characters in local db
+POST {{baseUrl}}/offline/dropchar
+Content-Type: application/json
+
+{
+    "inputUserCharID": "1"
+}
+
 #######create buttons to iterate on existing characters
 
 ##track/untrack char

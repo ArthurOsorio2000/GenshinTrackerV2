@@ -3,7 +3,7 @@ from routes_offline_genshintracker import OfflineGenshinTrackerAPI
 from routes_login import LoginAPI
 from toolbox import bcrypt
 from online_database import db, User_Profiles
-from flask_sqlalchemy import SQLAlchemy
+from offline_database import LoadOfflineDB
 from flask_login import *
 from flask import *
 from dotenv import load_dotenv
@@ -37,6 +37,7 @@ def create_app():
 
     #initialise sqlalchemy database models from database | db = sqlalchemy
     db.init_app(app)
+    LoadOfflineDB()
 
     login_manager.init_app(app)
 
