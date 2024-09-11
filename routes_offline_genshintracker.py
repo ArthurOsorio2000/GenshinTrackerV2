@@ -13,7 +13,8 @@ def health():
     return jsonify({"status": "ok"}), 200 
 
 
-###################################   add new character to offline db  ###################################
+
+###################################   manip chars in offline db  ###################################
 @OfflineGenshinTrackerAPI.route("/offline/addnewchar", methods=['POST'])
 def CreateNewChar():
     #get data from register data stream
@@ -31,22 +32,24 @@ def CreateNewChar():
             cursor = connection.cursor()
 
             cursor.execute("""INSERT INTO user_characters
-                (user_Char_id, is_tracked, char_Level, normalatk_level, skill_level, burst_level)
+                (user_char_id, is_tracked, char_level, normalatk_level, skill_level, burst_level)
                 values (?, ?, ?, ?, ?, ?)""",
                 (userCharID, False, 0, 0, 0, 0))
             connection.commit()
             connection.close()
 
             return jsonify({
-                "success" : "User owns new character"
+                "success" : "User now owns: [" + OfflineFindCharTempID(userCharID)[1] + "]"
                 }), 201
         return jsonify({
-        "error" : "User already owns character"
+        "error" : "User already owns character: " + OfflineFindCharTempID(userCharID)[1]
         }), 404
     return jsonify({
-        "error" : "Character Template does not exist."
+        "error" : "Character Template " + str(userCharID) + " does not exist."
         }), 404
 
+
+##drop owned characters
 @OfflineGenshinTrackerAPI.route("/offline/dropchar", methods=['POST'])
 def DropChar():
     #get data from register data stream
@@ -59,11 +62,11 @@ def DropChar():
         connection = sqlite3.connect('local_db.sqlite3')
         cursor = connection.cursor()
 
-        cursor.execute("""DELETE FROM user_characters WHERE user_char_id = ?""", (userCharID))
+        cursor.execute("""DELETE FROM user_characters WHERE user_char_id = ?""", (userCharID, ))
         connection.commit()
         connection.close()
         return jsonify({
-            "success" : str(userCharID) + " deleted :("
+            "success" : "Character [" + OfflineFindCharTempID(userCharID)[1] + "] removed from owned chars :("
             }), 201
     return jsonify({
             "error" : "User character not found."
@@ -100,7 +103,7 @@ def FlipTrack():
     connection.close()   
 
     return jsonify({
-        "success" : "userchar tracked: " + str(bool(tracking))
+        "success" : "userchar [" + str(userCharID) + "] tracked: " + str(bool(tracking))
         }), 201
 
 

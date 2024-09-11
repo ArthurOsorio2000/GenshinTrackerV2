@@ -188,7 +188,8 @@ def GetAllUserCharacters(searchuserid):
             ).filter(
                 User_Characters.user_id == foundUser.user_id
             ).all()
-        
+
+
         if(len(foundUserOwnedChars) != 0):
             #output if user has one or more characters
             return jsonify({
