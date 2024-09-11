@@ -49,7 +49,7 @@ POST {{baseUrl}}/offline/addnewchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "1"
+    "inputUserCharID": "15"
 }
 
 ###remove character from owned characters in local db
@@ -57,7 +57,7 @@ POST {{baseUrl}}/offline/dropchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "1"
+    "inputUserCharID": "15"
 }
 
 #######create buttons to iterate on existing characters
@@ -68,7 +68,7 @@ POST {{baseUrl}}/offline/fliptracking
 Content-Type: application/json
 
 {
-    "inputUserCharID": "1"
+    "inputUserCharID": "15"
 }
 
 ####front end remember to only activate on negative edge

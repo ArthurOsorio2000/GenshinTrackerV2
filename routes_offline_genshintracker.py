@@ -87,7 +87,7 @@ def FlipTrack():
 
     connection = sqlite3.connect('local_db.sqlite3')
     cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM user_characters WHERE user_char_id = ?""", (userCharID))
+    cursor.execute("""SELECT * FROM user_characters WHERE user_char_id = ?""", (userCharID, ))
     foundUserChar = cursor.fetchone()
 
     if not foundUserChar:
@@ -103,7 +103,7 @@ def FlipTrack():
     connection.close()   
 
     return jsonify({
-        "success" : "userchar [" + str(userCharID) + "] tracked: " + str(bool(tracking))
+        "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] tracked: " + str(bool(tracking))
         }), 201
 
 
