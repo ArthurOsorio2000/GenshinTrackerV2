@@ -43,18 +43,30 @@ POST {{baseUrl}}/logout
 GET {{baseUrl}}/getallusers
 
 ################### Add new user character to user #####################
-###create new character in offline database
-POST {{baseUrl}}/offline/createnewchar
+
+###create new character in offline database with base stats
+POST {{baseUrl}}/offline/addnewchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "1",
-    "inputIsTracked": "False",
-    "inputCharLevel": "10",
-    "inputNormalAtkLevel": "1",
-    "inputSkillLevel": "2",
-    "inputBurstLevel": "4"
+    "inputUserCharID": "1"
 }
+
+#######create buttons to iterate on existing characters
+
+##track/untrack char
+##flip flop or button replace?
+POST {{baseUrl}}/offline/fliptracking
+Content-Type: application/json
+
+{
+    "inputUserCharID": "1"
+}
+
+####front end remember to only activate on negative edge
+##raise normal attack level
+##raise skill level
+##raise burst level
 
 ##################sync offline db with online regions
 GET {{baseUrl}}/syncdown

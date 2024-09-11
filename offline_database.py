@@ -1,7 +1,6 @@
 import sqlite3
 
 connection = sqlite3.connect('local_db.sqlite3')
-
 cursor = connection.cursor()
 
 #create weapon types table
@@ -109,5 +108,4 @@ cursor.execute("SELECT * FROM character_templates")
 print(cursor.fetchall())
 
 connection.commit()
-
 connection.close()
