@@ -49,7 +49,7 @@ POST {{baseUrl}}/offline/addnewchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "15"
+    "inputUserCharID": "16"
 }
 
 ###remove character from owned characters in local db
@@ -57,7 +57,7 @@ POST {{baseUrl}}/offline/dropchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "15"
+    "inputUserCharID": "16"
 }
 
 #######create buttons to iterate on existing characters
@@ -68,13 +68,24 @@ POST {{baseUrl}}/offline/fliptracking
 Content-Type: application/json
 
 {
-    "inputUserCharID": "15"
+    "inputUserCharID": "16"
 }
 
 ####front end remember to only activate on negative edge
 ##raise normal attack level
+POST {{baseUrl}}/offline/tapraisenalevel
+Content-Type: application/json
+
+{
+    "inputUserCharID": "16"
+}
+##numerically change normal attack level
+
 ##raise skill level
+##numerically change skill level
+
 ##raise burst level
+##numerically change burst level
 
 ##################sync offline db with online regions
 GET {{baseUrl}}/syncdown

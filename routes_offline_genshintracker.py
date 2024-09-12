@@ -109,6 +109,52 @@ def FlipTrack():
 
 ####front end remember to only activate on negative edge
 ##raise normal attack level
+##make sure level stays under 10(13?)
+@OfflineGenshinTrackerAPI.route("/offline/tapraisenalevel", methods=['POST'])
+def TapRaiseNALevel():
+    data = request.get_json()
+    userCharID = data.get('inputUserCharID')
+
+    connection = sqlite3.connect('local_db.sqlite3')
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM user_characters WHERE user_char_id = ?""", (userCharID, ))
+    foundUserChar = cursor.fetchone()
+
+    if not foundUserChar:
+        connection.close()
+        return jsonify({
+            "error" : "character not owned"
+            }), 404
+    overlevel = False
+    if foundUserChar[3] < 10:
+        cursor.execute("""UPDATE user_characters SET normalatk_level = ? WHERE user_char_id = ?""", ((foundUserChar[3] + 1), userCharID))
+    else:
+        overlevel = True
+    connection.commit()
+    connection.close()   
+
+    if overlevel:
+        return jsonify({
+        "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] NA maxed."
+        }), 201
+    return jsonify({
+        "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] NA increased: " + str(foundUserChar[3] + 1)
+        }), 201
+
+##numerically change normal attack level
+##make sure level stays between 0 and 10(13?)
+@OfflineGenshinTrackerAPI.route("/offline/changenalvl", methods=['POST'])
+def ChangeNALevel():
+    return 0
+
+
 ##raise skill level
+
+##numerically chang skill level
+
+
+
 ##raise burst level
+
+##numerically chang burst level
 
