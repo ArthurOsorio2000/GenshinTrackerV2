@@ -79,7 +79,14 @@ Content-Type: application/json
 {
     "inputUserCharID": "16"
 }
-##numerically change normal attack level
+###numerically change normal attack level
+POST {{baseUrl}}/offline/changenalvl
+Content-Type: application/json
+
+{
+    "inputUserCharID": "16",
+    "inputCharSkillChange": "5"
+}
 
 ##raise skill level
 ##numerically change skill level

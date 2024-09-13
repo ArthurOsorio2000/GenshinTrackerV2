@@ -106,7 +106,7 @@ def FlipTrack():
         "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] tracked: " + str(bool(tracking))
         }), 201
 
-
+########################################## Change skill numbers ##########################################
 ####front end remember to only activate on negative edge
 ##raise normal attack level
 ##make sure level stays under 10(13?)
@@ -131,7 +131,7 @@ def TapRaiseNALevel():
     else:
         overlevel = True
     connection.commit()
-    connection.close()   
+    connection.close()
 
     if overlevel:
         return jsonify({
@@ -141,11 +141,40 @@ def TapRaiseNALevel():
         "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] NA increased: " + str(foundUserChar[3] + 1)
         }), 201
 
+########################################## Change skill numbers ##########################################
 ##numerically change normal attack level
 ##make sure level stays between 0 and 10(13?)
 @OfflineGenshinTrackerAPI.route("/offline/changenalvl", methods=['POST'])
 def ChangeNALevel():
-    return 0
+    data = request.get_json()
+    userCharID = int(data.get('inputUserCharID'))
+    charSkillChange = int(data.get('inputCharSkillChange'))
+
+    connection = sqlite3.connect('local_db.sqlite3')
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM user_characters WHERE user_char_id = ?""", (userCharID, ))
+    foundUserChar = cursor.fetchone()
+
+    if ((charSkillChange < 0) or (charSkillChange > 10)):
+        connection.close()
+        return jsonify({
+            "error" : "skill level not allowed"
+            }), 400
+
+    if not foundUserChar:
+        connection.close()
+        return jsonify({
+            "error" : "character not owned"
+            }), 404
+    
+    #change user skill based on input number
+    cursor.execute("""UPDATE user_characters SET normalatk_level = ? WHERE user_char_id = ?""", (charSkillChange, userCharID))
+    connection.commit()
+    connection.close()
+
+    return jsonify({
+        "success" : "userchar [" + OfflineFindCharTempID(userCharID)[1] + "] NA changed: " + str(charSkillChange)
+        }), 201
 
 
 ##raise skill level
