@@ -49,7 +49,7 @@ POST {{baseUrl}}/offline/addnewchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "16"
+    "inputUserCharID": "15"
 }
 
 ###remove character from owned characters in local db
@@ -57,7 +57,7 @@ POST {{baseUrl}}/offline/dropchar
 Content-Type: application/json
 
 {
-    "inputUserCharID": "16"
+    "inputUserCharID": "15"
 }
 
 #######create buttons to iterate on existing characters
@@ -68,31 +68,60 @@ POST {{baseUrl}}/offline/fliptracking
 Content-Type: application/json
 
 {
-    "inputUserCharID": "16"
+    "inputUserCharID": "15"
 }
 
 ####front end remember to only activate on negative edge
-##raise normal attack level
+###raise normal attack level
 POST {{baseUrl}}/offline/tapraisenalevel
 Content-Type: application/json
 
 {
-    "inputUserCharID": "16"
+    "inputUserCharID": "15"
 }
+
+###raise skill level
+POST {{baseUrl}}/offline/tapraiseskilllevel
+Content-Type: application/json
+
+{
+    "inputUserCharID": "15"
+}
+
+###raise burst level
+POST {{baseUrl}}/offline/tapraiseburstlevel
+Content-Type: application/json
+
+{
+    "inputUserCharID": "15"
+}
+
 ###numerically change normal attack level
 POST {{baseUrl}}/offline/changenalvl
 Content-Type: application/json
 
 {
-    "inputUserCharID": "16",
-    "inputCharSkillChange": "5"
+    "inputUserCharID": "15",
+    "inputCharSkillChange": "1"
 }
 
-##raise skill level
-##numerically change skill level
+###numerically change skill level
+POST {{baseUrl}}/offline/changeskilllvl
+Content-Type: application/json
 
-##raise burst level
-##numerically change burst level
+{
+    "inputUserCharID": "15",
+    "inputCharSkillChange": "1"
+}
+
+###numerically change burst level
+POST {{baseUrl}}/offline/changeburstlvl
+Content-Type: application/json
+
+{
+    "inputUserCharID": "15",
+    "inputCharSkillChange": "1"
+}
 
 ##################sync offline db with online regions
 GET {{baseUrl}}/syncdown
